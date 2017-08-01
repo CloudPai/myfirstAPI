@@ -46,6 +46,7 @@ class SnippetDetail(APIView):
     permission_classes = (permissions.IsAuthenticatedOrReadOnly,
                           IsOwnerOrReadOnly,)
 
+
     def get_object(self, pk):
         try:
             return Snippet.objects.get(pk=pk)
