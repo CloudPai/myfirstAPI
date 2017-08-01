@@ -11,6 +11,11 @@ from snippets.serializers import UserSerializer
 from rest_framework import permissions
 from snippets.permissions import IsOwnerOrReadOnly
 
+from rest_framework.authtoken.views import ObtainAuthToken
+
+
+
+
 class SnippetList(APIView):
     """
     List all snippets, or create a new snippet.
@@ -64,6 +69,13 @@ class SnippetDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+# class MyObtainAuthToken(ObtainAuthToken):
+#     """
+#     Login Auth
+#     In order to return specific code, we rewrite TokenSerializer class
+#     """
+#     serializer_class = MyAuthTokenSerializer
 
 
 
