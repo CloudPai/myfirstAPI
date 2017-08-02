@@ -10,6 +10,7 @@ from django.contrib.auth.models import User
 from snippets.serializers import UserSerializer
 from rest_framework import permissions
 from snippets.permissions import IsOwnerOrReadOnly
+from rest_framework.authtoken.models import Token
 
 from rest_framework.authtoken.views import ObtainAuthToken
 
@@ -88,3 +89,8 @@ class UserList(generics.ListAPIView):
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
