@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from rest_framework.decorators import api_view
 
 from snippets.models import Snippet
 from snippets.serializers import SnippetSerializer
@@ -7,7 +8,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status, generics
 from django.contrib.auth.models import User
-from snippets.serializers import UserSerializer
+from snippets.serializers import UserSerializer,MyAuthTokenSerializer
 from rest_framework import permissions
 from snippets.permissions import IsOwnerOrReadOnly
 from rest_framework.authtoken.models import Token
@@ -94,3 +95,25 @@ class UserDetail(generics.RetrieveAPIView):
 def create_auth_token(sender, instance=None, created=False, **kwargs):
     if created:
         Token.objects.create(user=instance)
+
+
+class MyObtainAuthToken(ObtainAuthToken):
+    """
+    Login Auth 登录认证
+    In order to return specific code, we rewrite TokenSerializer class
+    """
+    serializer_class = MyAuthTokenSerializer
+
+# 用于注册
+# @api_view(['POST'])
+# def create_auth(request):
+#     serialized = UserSerializer(data=request.DATA)
+#     if serialized.is_valid():
+#         User.objects.create_user(
+#             serialized.init_data['email'],
+#             serialized.init_data['username'],
+#             serialized.init_data['password']
+#         )
+#         return Response(serialized.data, status=status.HTTP_201_CREATED)
+#     else:
+#         return Response(serialized._errors, status=status.HTTP_400_BAD_REQUEST)
